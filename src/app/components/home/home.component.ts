@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Fox } from '../../models/fox.model';
 import { FoxService } from '../../service/fox.service';
 
 @Component({
@@ -8,12 +9,23 @@ import { FoxService } from '../../service/fox.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
   foxImage : string = ""
   foxUrl : string = ""
 
-  constructor(private foxService : FoxService){}
+  myFox : Fox ;
+
+
+  constructor(private foxService : FoxService){
+    this.myFox = new Fox();
+  }
+  
+  
+  ngOnInit(): void {
+    console.log("la pagina è stata caricata !!!!")
+    this.onClickGetSomeFox();
+  }
 
 
   onClickFoxRetriver(){
@@ -23,5 +35,16 @@ export class HomeComponent {
       this.foxUrl = data.link
     });
   }
+
+
+  onClickGetSomeFox(){
+    this.foxService.getSomeFox().subscribe((data) => {
+      console.log(data)
+      this.myFox.image = data.image
+      this.myFox.link = data.link
+    })
+  }
+
+
 
 }
